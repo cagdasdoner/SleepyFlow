@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 
+#include "Hardware.h"
 #include "Timer.h"
 #include "Display.h"
 #include "FlowSensor.h"
@@ -9,12 +10,11 @@
 
 void setup()
 {
-  Serial.begin(BAUD_RATE);
-  Serial.println("FLOWMETER..");
-  TIMERStart();
-  DISPStart();
-  FLOWStart();
-  COINStart();
+  HWSetup();
+  TIMERSetup(TIMER_INTERVAL);
+  DISPSetup();
+  FLOWSetup();
+  COINSetup();
 }
 
 void loop()    

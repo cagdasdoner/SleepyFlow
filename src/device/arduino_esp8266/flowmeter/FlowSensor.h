@@ -1,8 +1,10 @@
-#ifndef ARDUINO_FLOWSENSOR
-#define ARDUINO_FLOWSENSOR
+#ifndef ARDUINO_FLOWSENSOR_H
+#define ARDUINO_FLOWSENSOR_H
 
 #include <Arduino.h>
 
+void FLOWSetup();
 void FLOWStart();
-void FLOWLoop() ;  
-#endif /* ARDUINO_FLOWSENSOR */
+void FLOWStop();
+void FLOWLoop();  
+#endif /* ARDUINO_FLOWSENSOR_H */

@@ -3,31 +3,53 @@
 #include "Global.h"
 
 #define LITER_THRESHOLD   440
-#define LITER_TO_MEASURE  99
+#define LITER_TO_MEASURE  10
 #define TOTAL_LITER_PULSE LITER_THRESHOLD * LITER_TO_MEASURE
 
 volatile int pulseCount = 0;                      
 int pulseInputPin = D5;
-int literCount = LITER_TO_MEASURE;
+int valveControlPin = D6;
+int literCount = 0;
+bool flowActivation = false;
 
 void pulseCb()
 {
-  Serial.println(pulseCount);
+  Printf("%d\n", pulseCount);
   pulseCount++;
+}
+
+void enableValve()
+{
+  
+}
+
+void FLOWSetup()
+{
+  pinMode(pulseInputPin, INPUT);
+  attachInterrupt(digitalPinToInterrupt(pulseInputPin), pulseCb, RISING);
+  pinMode(valveControlPin, OUTPUT);
 }
 
 void FLOWStart()
 {
-  pinMode(pulseInputPin, INPUT);
-  attachInterrupt(digitalPinToInterrupt(pulseInputPin), pulseCb, RISING);
+  literCount = LITER_TO_MEASURE;
+  pulseCount = 0;
   DISPWriteLiter(literCount);
+  flowActivation = true;
+  digitalWrite(valveControlPin, HIGH);
+}
+
+void FLOWStop()
+{
+  flowActivation = false;
+  digitalWrite(valveControlPin, LOW);
 }
 
 void FLOWLoop()    
 {
   if(pulseCount > LITER_THRESHOLD)
   {
-    Serial.println("One liter measured.");
+    Printf("One liter measured.\n");
     literCount--;
     DISPWriteLiter(literCount);
     pulseCount = 0;

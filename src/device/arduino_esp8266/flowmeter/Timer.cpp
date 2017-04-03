@@ -11,15 +11,20 @@ boolean ticked = false;
 unsigned int interval = 1000;
 unsigned int totalTicks = 0;
 
-void publishCallback(void *pArg)
+void tickedCallback(void *pArg)
 {
   /* Keep our ISR light! */
   ticked = true;
 }
 
+void TIMERSetup(unsigned int _interval)
+{
+  interval = _interval;
+}
+
 void TIMERStart()
 {
-  os_timer_setfn(&tickTimer, publishCallback, NULL);
+  os_timer_setfn(&tickTimer, tickedCallback, NULL);
   os_timer_arm(&tickTimer, interval, true);
   ticked = false;
 }
@@ -27,6 +32,11 @@ void TIMERStart()
 void TIMERStop()
 {
   os_timer_disarm(&tickTimer);
+}
+
+unsigned int TIMERGetTicks()
+{
+  return totalTicks;
 }
 
 void TIMERLoop()

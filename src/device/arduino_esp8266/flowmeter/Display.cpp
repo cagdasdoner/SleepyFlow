@@ -1,40 +1,12 @@
 #include "Display.h"
 #include "Global.h"
 
-#define NDIGITS         8
-#define NDIGITS_MASK    7
-
 const int latchpin = D2 ; // RCK
 const int clockpin = D1 ; // SCK
 const int datapin = D0 ;  // DIO
 
 int valToWrite = 0;
-int clockWrite = 0;
-
-byte col[NDIGITS] = {
-  0b00000001,
-  0b00000010,
-  0b00000100,
-  0b00001000,
-  0b00010000,
-  0b00100000,
-  0b01000000,
-  0b10000000
-} ;
-
-byte seg[] = {
-  0b11000000,  // 0
-  0b11111001,  // 1
-  0b10100100,  // 2
-  0b10110000,  // 3
-  0b10011001,  // 4
-  0b10010010,  // 5
-  0b10000010,  // 6
-  0b11111000,  // 7
-  0b10000000,  // 8
-  0b10010000,  // 9  
-  0b10010000,  // 9  
-} ;     
+int clockWrite = 0;   
 
 byte segbuf[NDIGITS] = { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff } ;
 byte segcnt = 0;
@@ -66,12 +38,12 @@ void DISPWriteTime(int tick)
   segbuf[3] = seg[secondWrite % 10];
 }
 
-void DISPStart()
+void DISPSetup()
 {
   pinMode(latchpin, OUTPUT);
   pinMode(clockpin, OUTPUT);
   pinMode(datapin, OUTPUT);
-  Serial.println("8x7 DISPLAY OK.");
+  Printf("8x7 DISPLAY OK.");
 }
 
 void DISPLoop()

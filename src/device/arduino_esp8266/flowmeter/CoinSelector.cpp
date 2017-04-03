@@ -1,23 +1,31 @@
 #include "CoinSelector.h"
+#include "FlowSensor.h"
+#include "Hardware.h"
+#include "Timer.h"
 #include "Global.h"
 
 unsigned int totalCoin = 0;
 
+/* Coin inserted, take action. */
 void performInserted()
 {
-
+  TIMERStart();
+  FLOWStart();
 }
 
-void COINStart()
+void COINSetup()
 {
   totalCoin = 0;
+  if(analogRead(A0) > 0)
+  {
+    Printf("Coin selector is not connected?\n");
+  }
 }
 
-/* Analog reading is not healthy. */
+/* Analog reading is not the solution. */
 void COINLoop()
 {
-  int a = analogRead(A0);
-  if(a > 0)
+  if(analogRead(A0) > 0)
   {
     Printf("Coin inserted. Total : %d\n",++totalCoin);
     performInserted();
