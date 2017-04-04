@@ -31,6 +31,7 @@ static const byte seg[] = {
   0b10010000,  // 9  
 } ;  
 
+void DISPInitialState();
 void DISPWriteLiter(int param);
 void DISPWriteTime(int tick);
 void DISPSetup();

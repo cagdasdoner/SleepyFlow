@@ -14,19 +14,27 @@ byte segcnt = 0;
 void LED_irq(void)
 {
   digitalWrite(latchpin, LOW);
-  // select the digit...
   shiftOut(datapin, clockpin, MSBFIRST, col[segcnt]) ;
-  // and select the segments
   shiftOut(datapin, clockpin, MSBFIRST, segbuf[segcnt]) ;
   digitalWrite(latchpin, HIGH) ;
   segcnt ++ ;
   segcnt &= NDIGITS_MASK ;
 }
 
-void DISPWriteLiter(int param)
+void DISPInitialState()
 {
-  segbuf[6] = seg[param / 10];
-  segbuf[7] = seg[param % 10];
+  segbuf[0] = seg[0];
+  segbuf[2] = seg[0];
+  segbuf[3] = seg[0];
+  
+  segbuf[6] = seg[0];
+  segbuf[7] = seg[0];
+}
+
+void DISPWriteLiter(int _param)
+{
+  segbuf[6] = seg[_param / 10];
+  segbuf[7] = seg[_param % 10];
 }
 
 void DISPWriteTime(int tick)
@@ -43,7 +51,7 @@ void DISPSetup()
   pinMode(latchpin, OUTPUT);
   pinMode(clockpin, OUTPUT);
   pinMode(datapin, OUTPUT);
-  Printf("8x7 DISPLAY OK.");
+  DISPInitialState();
 }
 
 void DISPLoop()

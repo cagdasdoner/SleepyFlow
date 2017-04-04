@@ -24,6 +24,8 @@ void TIMERSetup(unsigned int _interval)
 
 void TIMERStart()
 {
+  TIMERStop();
+  delay(HW_DELAY);
   os_timer_setfn(&tickTimer, tickedCallback, NULL);
   os_timer_arm(&tickTimer, interval, true);
   ticked = false;

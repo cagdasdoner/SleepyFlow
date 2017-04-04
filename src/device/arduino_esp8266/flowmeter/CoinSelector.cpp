@@ -5,13 +5,24 @@
 #include "Global.h"
 
 unsigned int totalCoin = 0;
+bool selectorInitialized = false;
+
+int anlg = -1;
 
 /* Coin inserted, take action. */
 void performInserted()
 {
+  Printf("Perform inserted!");
   TIMERStart();
   FLOWStart();
+  totalCoin++;
 }
+
+unsigned int COINGetTotal()
+{
+  return totalCoin;
+}
+
 
 void COINSetup()
 {
@@ -20,23 +31,26 @@ void COINSetup()
   {
     Printf("Coin selector is not connected?\n");
   }
+  else
+  {
+    selectorInitialized = true;
+  }
 }
 
 /* Analog reading is not the solution. */
 void COINLoop()
 {
-  if(analogRead(A0) > 0)
+  if(selectorInitialized)
   {
-    Printf("Coin inserted. Total : %d\n",++totalCoin);
-    performInserted();
-    /* Decrease delay. */
-    delay(250);
+   
+    if(analogRead(A0) > 0)
+    {
+      performInserted();
+      Printf("Coin inserted. Total : %d\n", totalCoin);
+      /* Decrease delay. */
+      delay(250);
+    }
   }
-}
-
-unsigned int COINGetTotal()
-{
-  return totalCoin;
 }
 
 

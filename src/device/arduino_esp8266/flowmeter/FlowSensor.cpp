@@ -20,7 +20,12 @@ void pulseCb()
 
 void enableValve()
 {
-  
+  digitalWrite(valveControlPin, HIGH);
+}
+
+void disableValve()
+{
+  digitalWrite(valveControlPin, LOW);
 }
 
 void FLOWSetup()
@@ -32,17 +37,21 @@ void FLOWSetup()
 
 void FLOWStart()
 {
-  literCount = LITER_TO_MEASURE;
+  FLOWStop();
+  delay(HW_DELAY);
+  literCount = 0;
   pulseCount = 0;
   DISPWriteLiter(literCount);
   flowActivation = true;
-  digitalWrite(valveControlPin, HIGH);
+  enableValve();
 }
 
 void FLOWStop()
 {
+  disableValve();
+  pulseCount = 0;
   flowActivation = false;
-  digitalWrite(valveControlPin, LOW);
+  DISPInitialState();
 }
 
 void FLOWLoop()    
@@ -50,9 +59,13 @@ void FLOWLoop()
   if(pulseCount > LITER_THRESHOLD)
   {
     Printf("One liter measured.\n");
-    literCount--;
+    literCount++;
     DISPWriteLiter(literCount);
     pulseCount = 0;
+  }
+  if(literCount == LITER_TO_MEASURE)
+  {
+    FLOWStop();
   }
 }
 
