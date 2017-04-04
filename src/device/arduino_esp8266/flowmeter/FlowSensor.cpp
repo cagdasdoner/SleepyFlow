@@ -41,7 +41,7 @@ void FLOWStart()
   delay(HW_DELAY);
   literCount = 0;
   pulseCount = 0;
-  DISPWriteLiter(literCount);
+  DISPWriteLiter(LITER_TO_MEASURE);
   flowActivation = true;
   enableValve();
 }
@@ -60,7 +60,7 @@ void FLOWLoop()
   {
     Printf("One liter measured.\n");
     literCount++;
-    DISPWriteLiter(literCount);
+    DISPWriteLiter(LITER_TO_MEASURE - literCount);
     pulseCount = 0;
   }
   if(literCount == LITER_TO_MEASURE)

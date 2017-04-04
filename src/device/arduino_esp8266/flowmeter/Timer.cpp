@@ -34,6 +34,7 @@ void TIMERStart()
 void TIMERStop()
 {
   os_timer_disarm(&tickTimer);
+  totalTicks = 0;
 }
 
 unsigned int TIMERGetTicks()
