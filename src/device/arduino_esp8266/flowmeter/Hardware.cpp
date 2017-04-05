@@ -1,13 +1,11 @@
 #include "Hardware.h"
 #include "Global.h"
 
-uint16_t serialDelay = 10;
-
 void SerialInit()
 {
   Serial.begin(BAUD_RATE);
   Serial.setDebugOutput(true);
-  delay(serialDelay);
+  delay(HW_DELAY);
 }
 
 void GPIOInit()

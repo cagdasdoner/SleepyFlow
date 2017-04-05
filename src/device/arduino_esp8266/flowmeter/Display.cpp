@@ -1,4 +1,5 @@
 #include "Display.h"
+#include "Hardware.h"
 #include "Global.h"
 
 const int latchpin = D2 ; // RCK

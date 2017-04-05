@@ -1,13 +1,11 @@
 #include "CoinSelector.h"
-#include "FlowSensor.h"
 #include "Hardware.h"
+#include "FlowSensor.h"
 #include "Timer.h"
 #include "Global.h"
 
 unsigned int totalCoin = 0;
 bool selectorInitialized = false;
-
-int anlg = -1;
 
 /* Coin inserted, take action. */
 void performInserted()

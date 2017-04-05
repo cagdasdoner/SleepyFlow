@@ -1,4 +1,5 @@
 #include "FlowSensor.h"
+#include "Hardware.h"
 #include "Display.h"
 #include "Global.h"
 
@@ -20,12 +21,20 @@ void pulseCb()
 
 void enableValve()
 {
+#ifdef USE_LOW_LEVEL_TRIGGER
+  digitalWrite(valveControlPin, LOW);
+#else
   digitalWrite(valveControlPin, HIGH);
+#endif
 }
 
 void disableValve()
 {
+#ifdef USE_LOW_LEVEL_TRIGGER
+  digitalWrite(valveControlPin, HIGH);
+#else
   digitalWrite(valveControlPin, LOW);
+#endif
 }
 
 void FLOWSetup()
@@ -33,6 +42,7 @@ void FLOWSetup()
   pinMode(pulseInputPin, INPUT);
   attachInterrupt(digitalPinToInterrupt(pulseInputPin), pulseCb, RISING);
   pinMode(valveControlPin, OUTPUT);
+  disableValve();
 }
 
 void FLOWStart()
@@ -40,7 +50,6 @@ void FLOWStart()
   FLOWStop();
   delay(HW_DELAY);
   literCount = 0;
-  pulseCount = 0;
   DISPWriteLiter(LITER_TO_MEASURE);
   flowActivation = true;
   enableValve();
