@@ -1,10 +1,11 @@
 #include "FlowSensor.h"
 #include "Hardware.h"
 #include "Display.h"
+#include "Timer.h"
 #include "Global.h"
 
 #define LITER_THRESHOLD   440
-#define LITER_TO_MEASURE  10
+#define LITER_TO_MEASURE  1
 #define TOTAL_LITER_PULSE LITER_THRESHOLD * LITER_TO_MEASURE
 
 volatile int pulseCount = 0;                      
@@ -14,9 +15,12 @@ int literCount = 0;
 bool flowActivation = false;
 
 void pulseCb()
-{
-  Printf("%d\n", pulseCount);
-  pulseCount++;
+{ 
+  if(flowActivation)
+  {
+    Printf("%d\n", pulseCount);
+    pulseCount++;
+  }
 }
 
 void enableValve()
@@ -49,18 +53,20 @@ void FLOWStart()
 {
   FLOWStop();
   delay(HW_DELAY);
-  literCount = 0;
   DISPWriteLiter(LITER_TO_MEASURE);
-  flowActivation = true;
+  TIMERStart();
   enableValve();
+  flowActivation = true;
 }
 
 void FLOWStop()
 {
   disableValve();
   pulseCount = 0;
-  flowActivation = false;
+  literCount = 0;
+  TIMERStop();
   DISPInitialState();
+  flowActivation = false;
 }
 
 void FLOWLoop()    

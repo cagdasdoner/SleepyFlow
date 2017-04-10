@@ -1,8 +1,9 @@
 #include "CoinSelector.h"
 #include "Hardware.h"
 #include "FlowSensor.h"
-#include "Timer.h"
 #include "Global.h"
+
+#define ANALOG_LOW_LEVEL 2
 
 unsigned int totalCoin = 0;
 bool selectorInitialized = false;
@@ -11,7 +12,6 @@ bool selectorInitialized = false;
 void performInserted()
 {
   Printf("Perform inserted!");
-  TIMERStart();
   FLOWStart();
   totalCoin++;
 }
@@ -20,7 +20,6 @@ unsigned int COINGetTotal()
 {
   return totalCoin;
 }
-
 
 void COINSetup()
 {
@@ -40,8 +39,7 @@ void COINLoop()
 {
   if(selectorInitialized)
   {
-   
-    if(analogRead(A0) > 0)
+    if(analogRead(A0) > ANALOG_LOW_LEVEL)
     {
       performInserted();
       Printf("Coin inserted. Total : %d\n", totalCoin);

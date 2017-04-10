@@ -1,5 +1,5 @@
-#ifndef ARDUINO_GLOBAL
-#define ARDUINO_GLOBAL
+#ifndef ARDUINO_GLOBAL_H
+#define ARDUINO_GLOBAL_H
 
 #define Printf            Serial.printf
 #define BAUD_RATE         9600
@@ -8,6 +8,6 @@
 #define HW_DELAY          10
 
 
-#endif /* ARDUINO_GLOBAL */
+#endif /* ARDUINO_GLOBAL_H */
 
 
