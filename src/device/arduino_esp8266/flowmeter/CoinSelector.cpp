@@ -3,7 +3,11 @@
 #include "FlowSensor.h"
 #include "Global.h"
 
-#define ANALOG_LOW_LEVEL 2
+#define ANALOG_LOW_LEVEL     1
+#define COIN_INSERTION_DELAY 100
+
+int prevVal = 0;
+int analogVal = 0;
 
 unsigned int totalCoin = 0;
 bool selectorInitialized = false;
@@ -34,17 +38,22 @@ void COINSetup()
   }
 }
 
-/* Analog reading is not the solution. */
+/* Analog reading is not the final solution. */
 void COINLoop()
 {
   if(selectorInitialized)
   {
-    if(analogRead(A0) > ANALOG_LOW_LEVEL)
+    analogVal = analogRead(A0);
+    if(analogVal > ANALOG_LOW_LEVEL)
     {
+      delay(COIN_INSERTION_DELAY);
       performInserted();
       Printf("Coin inserted. Total : %d\n", totalCoin);
-      /* Decrease delay. */
-      delay(250);
+    }
+    if(analogVal != prevVal)
+    {
+      Printf("Received new val : %d\n", analogVal);
+      prevVal = analogVal;
     }
   }
 }

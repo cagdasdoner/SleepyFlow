@@ -5,7 +5,7 @@
 #include "Global.h"
 
 #define LITER_THRESHOLD   440
-#define LITER_TO_MEASURE  1
+#define LITER_TO_MEASURE  10
 #define TOTAL_LITER_PULSE LITER_THRESHOLD * LITER_TO_MEASURE
 
 volatile int pulseCount = 0;                      
