@@ -49,10 +49,8 @@ void FLOWSetup()
   disableValve();
 }
 
-void FLOWStart(int milliliterVal)
+void readyForFlow()
 {
-  deciliterToMeasure = milliliterVal / 100;
-  Printf("deciliters : %d.\n", deciliterToMeasure);
   FLOWStop();
   delay(HW_DELAY);
   DISPWriteLiter(deciliterToMeasure);
@@ -61,14 +59,18 @@ void FLOWStart(int milliliterVal)
   enableValve();
 }
 
+void FLOWStart(int milliliterVal)
+{
+  deciliterToMeasure = milliliterVal / 100;
+  Printf("deciliters : %d.\n", deciliterToMeasure);
+  FLOWStop();
+  readyForFlow();
+}
+
 void FLOWInfinitive()
 {
-  FLOWStop();
-  delay(HW_DELAY);
-  flowActivation = true;
   flowInfinitive = true;
-  TIMERStart();
-  enableValve();
+  readyForFlow();
 }
 
 void FLOWStop()
@@ -84,27 +86,22 @@ void FLOWStop()
 
 void FLOWLoop()    
 {
-  if(flowInfinitive)
+  if(pulseCount > DECILITER_THRESHOLD)
   {
-    if(pulseCount > DECILITER_THRESHOLD)
+    pulseCount = 0;
+    deciliterCount++;
+    if(flowInfinitive)
     {
-      pulseCount = 0;
-      deciliterCount++;
       DISPWriteLiter(deciliterCount);
     }
-  }
-  else
-  {
-    if(pulseCount > DECILITER_THRESHOLD)
+    else
     {
-      pulseCount = 0;
-      deciliterCount++;
       DISPWriteLiter(deciliterToMeasure - deciliterCount);
     }
-    if(deciliterCount == deciliterToMeasure && deciliterToMeasure != 0)
-    {
-      FLOWStop();
-    }
+  }
+  if(deciliterCount == deciliterToMeasure && deciliterToMeasure != 0 && !flowInfinitive)
+  {
+    FLOWStop();
   }
 }
 
