@@ -5,6 +5,7 @@
 
 #define USE_LOW_LEVEL_TRIGGER
 #define USE_NODEMCU_BOARD
+//#define USE_COIN_SELECTOR 
 
 /*
  * A0 - Analog   0 - Coin Selector IN (temporary)

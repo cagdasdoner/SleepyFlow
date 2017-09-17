@@ -16,7 +16,7 @@ bool selectorInitialized = false;
 void performInserted()
 {
   Printf("Perform inserted!");
-  FLOWStart();
+  FLOWStart(DEFAULT_MLITER_VALUE);
   totalCoin++;
 }
 

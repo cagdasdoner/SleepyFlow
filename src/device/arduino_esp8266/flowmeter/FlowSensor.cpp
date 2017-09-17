@@ -4,15 +4,15 @@
 #include "Timer.h"
 #include "Global.h"
 
-#define LITER_THRESHOLD   440
-#define LITER_TO_MEASURE  10
-#define TOTAL_LITER_PULSE LITER_THRESHOLD * LITER_TO_MEASURE
+#define DECILITER_THRESHOLD   44
 
-volatile int pulseCount = 0;                      
+volatile int pulseCount = 0;
+int deciliterToMeasure = 0;                     
 int pulseInputPin = D5;
 int valveControlPin = D6;
-int literCount = 0;
+int deciliterCount = 0;
 bool flowActivation = false;
+bool flowInfinitive = false;
 
 void pulseCb()
 { 
@@ -49,38 +49,62 @@ void FLOWSetup()
   disableValve();
 }
 
-void FLOWStart()
+void FLOWStart(int milliliterVal)
+{
+  deciliterToMeasure = milliliterVal / 100;
+  Printf("deciliters : %d.\n", deciliterToMeasure);
+  FLOWStop();
+  delay(HW_DELAY);
+  DISPWriteLiter(deciliterToMeasure);
+  TIMERStart();
+  flowActivation = true;
+  enableValve();
+}
+
+void FLOWInfinitive()
 {
   FLOWStop();
   delay(HW_DELAY);
-  DISPWriteLiter(LITER_TO_MEASURE);
+  flowActivation = true;
+  flowInfinitive = true;
   TIMERStart();
   enableValve();
-  flowActivation = true;
 }
 
 void FLOWStop()
 {
+  flowActivation = false;
+  flowInfinitive = false;
   disableValve();
   pulseCount = 0;
-  literCount = 0;
+  deciliterCount = 0;
   TIMERStop();
   DISPInitialState();
-  flowActivation = false;
 }
 
 void FLOWLoop()    
 {
-  if(pulseCount > LITER_THRESHOLD)
+  if(flowInfinitive)
   {
-    Printf("One liter measured.\n");
-    literCount++;
-    DISPWriteLiter(LITER_TO_MEASURE - literCount);
-    pulseCount = 0;
+    if(pulseCount > DECILITER_THRESHOLD)
+    {
+      pulseCount = 0;
+      deciliterCount++;
+      DISPWriteLiter(deciliterCount);
+    }
   }
-  if(literCount == LITER_TO_MEASURE)
+  else
   {
-    FLOWStop();
+    if(pulseCount > DECILITER_THRESHOLD)
+    {
+      pulseCount = 0;
+      deciliterCount++;
+      DISPWriteLiter(deciliterToMeasure - deciliterCount);
+    }
+    if(deciliterCount == deciliterToMeasure && deciliterToMeasure != 0)
+    {
+      FLOWStop();
+    }
   }
 }
 

@@ -7,7 +7,6 @@
 #define TIMER_INTERVAL    1000
 #define HW_DELAY          10
 
-
 #endif /* ARDUINO_GLOBAL_H */
 
 
